@@ -1,58 +1,112 @@
 - hosts: tag_AnsibleGroup_bastions
+nsible.cfg
   gather_facts: true
+nsible.cfg
   become: true
+nsible.cfg
   tasks:
+nsible.cfg
   - name: Install required packages 
+nsible.cfg
     yum: 
+nsible.cfg
      name: "{{item}}"
+nsible.cfg
      state: latest 
+nsible.cfg
     loop: 
+nsible.cfg
       - python 
+nsible.cfg
       - python-pip 
+nsible.cfg
       - python-devel 
+nsible.cfg
       - gcc
+nsible.cfg
   - name: Install tower-cli
+nsible.cfg
     pip:
+nsible.cfg
      name: ansible-tower-cli
+nsible.cfg
      state: latest
+nsible.cfg
   - name: List key files
+nsible.cfg
     shell: (cd /root/.ssh; find . -maxdepth 1 -type f -iname '*key.pem')| cut -d'/' -f2
+nsible.cfg
     register: file_to_copy
+nsible.cfg
   - name: Tower Creds key file
+nsible.cfg
     tower_credential:
+nsible.cfg
       name: Creds for AWS instances
+nsible.cfg
       organization: Default
+nsible.cfg
       state: present
+nsible.cfg
       kind: ssh
+nsible.cfg
       tower_host: tower1.{{tower_guid}}.example.opentlc.com
+nsible.cfg
       tower_username: admin
+nsible.cfg
       tower_password: r3dh4t1!
+nsible.cfg
       tower_verify_ssl: no
+nsible.cfg
       ssh_key_data: "/root/.ssh/{{ file_to_copy.stdout }}"
+nsible.cfg
       username: ec2-user
+nsible.cfg
   - name: Update Prod Job template
+nsible.cfg
     tower_job_template:
-      name: "09_3 tier app on Prod"
+nsible.cfg
+      name: "3 tier app on Prod"
+nsible.cfg
       credential: "Creds for AWS instances"
+nsible.cfg
       tower_host: tower1.{{tower_guid}}.example.opentlc.com
+nsible.cfg
       tower_username: admin
+nsible.cfg
       tower_password: r3dh4t1!
+nsible.cfg
       tower_verify_ssl: no
+nsible.cfg
       state: present
+nsible.cfg
       job_type: run
+nsible.cfg
       playbook: site-3tier-app.yml
-      project: "00_Homework Assignment"
+nsible.cfg
+      project: "HomeworkAssignment"
+nsible.cfg
   - name: Update Prod Smoke Job template
+nsible.cfg
     tower_job_template:
-      name: "10_Smoke test Prod env"
+nsible.cfg
+      name: "Smoke test Prod env"
+nsible.cfg
       credential: "Creds for AWS instances"
+nsible.cfg
       tower_host: tower1.{{tower_guid}}.example.opentlc.com
+nsible.cfg
       tower_username: admin
+nsible.cfg
       tower_password: r3dh4t1!
+nsible.cfg
       tower_verify_ssl: no
+nsible.cfg
       state: present
+nsible.cfg
       job_type: run
+nsible.cfg
       playbook: site-smoketest-aws.yml
-      project: "00_Homework Assignment"
-
-    
+nsible.cfg
+      project: "HomeworkAssignment"
+nsible.cfg

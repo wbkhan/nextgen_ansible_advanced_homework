@@ -1,5 +1,18 @@
 - hosts: localhost
   gather_facts: false 
-  become: yes 
+#  debugger: on_failed
+#  strategy: free
+  become: yes
+  vars:
+    - TOWER_GUID: "{{ lookup('env','TOWER_GUID') }}"
+    - OPENTLC_ID: "{{ lookup('env','OPENTLC_ID') }}" 
+    - OPENTLC_PASSWORD: "{{ lookup('env','OPENTLC_PASSWORD') }}"
+    - path_to_opentlc_key: "{{ lookup('env','path_to_opentlc_key') }}"
+    - param_repo_base: "{{ lookup('env','param_repo_base') }}"
+    - GITHUB_REPO: "{{ lookup('env','GITHUB_REPO') }}"
+    - OSP_GUID: "{{ lookup('env','OSP_GUID') }}"
+    - OPENTLC_ID: "{{ lookup('env','OPENTLC_ID') }}"
+    - REGION_NAME: "{{ lookup('env','REGION_NAME') }}"
+    - EMAIL: "{{ lookup('env','EMAIL') }}"
   roles:
     - config-tower

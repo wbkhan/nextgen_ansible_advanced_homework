@@ -1,50 +1,100 @@
 ---
+nsible.cfg
 - hosts: workstation
+nsible.cfg
   become: true
+nsible.cfg
   gather_facts: false
+nsible.cfg
   tasks:
+nsible.cfg
     - name: create bin directory
+nsible.cfg
       file:
+nsible.cfg
         path: /root/bin
+nsible.cfg
         state: directory
+nsible.cfg
     - name: get script common.sh
+nsible.cfg
       get_url:
+nsible.cfg
         url: "{{ param_repo_base }}/scripts/common.sh"
+nsible.cfg
         dest: /root/common.sh
+nsible.cfg
         mode: 0755
+nsible.cfg
 
+nsible.cfg
     - name: get script jq
+nsible.cfg
       get_url: 
+nsible.cfg
         url: "{{ param_repo_base }}/scripts/jq-linux64"
+nsible.cfg
         dest: /root/bin/jq
+nsible.cfg
         mode: 0755
+nsible.cfg
     - name: get script order_svc.sh
+nsible.cfg
       get_url:
+nsible.cfg
         url: "{{ param_repo_base }}/scripts/order_svc.sh"
+nsible.cfg
         dest: /root/order_svc.sh
+nsible.cfg
         mode: 0755
+nsible.cfg
     - name: create credentials
+nsible.cfg
       copy:
+nsible.cfg
         content: |
+nsible.cfg
           export username={{ param_user }}
+nsible.cfg
           export password={{ param_password }}
+nsible.cfg
           export uri=https://labs.opentlc.com
+nsible.cfg
         dest: /root/credential.rc
+nsible.cfg
         mode: 0755
+nsible.cfg
 
+nsible.cfg
     # Fix the existing shell scripts to reference jq command with bin/jq
+nsible.cfg
     - name: fix scripts
+nsible.cfg
       shell: "sed -i 's/ jq/ bin\\/jq/g' {{ item }}"
+nsible.cfg
       with_items:
+nsible.cfg
         - /root/common.sh
+nsible.cfg
         - /root/order_svc.sh
+nsible.cfg
 
+nsible.cfg
     # Using this script will always deploy environments in the us-east-1 region.
+nsible.cfg
     # TODO: this shell task is not working yet!
+nsible.cfg
     - name: order service on opentlc
+nsible.cfg
       shell: source /root/credential.rc; ./order_svc.sh -y -c 'OPENTLC Automation' -i 'Ansible Advanced - Three Tier App' -t 1 -d 'dialog_expiration=7;region=na;nodes=1;dialog_runtime=8'
+nsible.cfg
       args:
+nsible.cfg
         chdir: /root
+nsible.cfg
     - name: Wait for mail
+nsible.cfg
       pause:
+nsible.cfg
         minutes: 10 
+nsible.cfg

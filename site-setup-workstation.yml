@@ -1,10 +1,13 @@
 # Playbook to setup workstation and create osp network, router, SG and ssh keypair
 
 - hosts: localhost
+  vars:
+    OSP_GUID: "{{ lookup('env','OSP_GUID') }}"
+    OSP_DOMAIN: "{{ lookup('env','OSP_DOMAIN') }}"
   tasks:
   - name: Create workstation inventory
     add_host:
-       name: "workstation-{{OSP_GUID}}.rhpds.opentlc.com"
+       name: "workstation-{{OSP_GUID}}.{{OSP_DOMAIN}}"
        group: workstation
 
 

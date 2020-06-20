@@ -1,13 +1,26 @@
 - hosts: all
+nsible.cfg
   gather_facts: false
+nsible.cfg
   tasks:
+nsible.cfg
   - name: Check the instances status
+nsible.cfg
     wait_for:
+nsible.cfg
       host: "{{ item }}"
+nsible.cfg
       port: 22
+nsible.cfg
       search_regex: OpenSSH
+nsible.cfg
       timeout: 600
+nsible.cfg
     delegate_to: localhost
+nsible.cfg
     with_items:
+nsible.cfg
       - "{{ inventory_hostname }}"
+nsible.cfg
         
+nsible.cfg

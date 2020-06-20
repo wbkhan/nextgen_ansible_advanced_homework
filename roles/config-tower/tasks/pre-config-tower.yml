@@ -10,8 +10,8 @@
 
 - name: Copy opentlc ssh keys
   copy:
-    src: "{{path_to_opentlc_key}}"
-    dest: /root/secret.pem
+    src: /root/.ssh/openstack.pub
+    dest: /root/.ssh/openstack.pub
 
 
 - name: Copy inventory vars
